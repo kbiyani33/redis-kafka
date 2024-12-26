@@ -8,7 +8,7 @@ from utils.decorators import log_api_endpoint_execution_time
 router = APIRouter()
 producer = get_kafka_producer()
 
-@router.post("/kafka-only/items")
+@router.post("/items")
 @log_api_endpoint_execution_time
 async def create_item(request:Request, item: ItemModel):
     try:
@@ -23,7 +23,7 @@ async def create_item(request:Request, item: ItemModel):
     except DuplicateKeyError:
         raise HTTPException(status_code=400, detail="Item already exists")
 
-@router.get("/kafka-only/items/{item_id}")
+@router.get("/items/{item_id}")
 @log_api_endpoint_execution_time
 async def read_item(request:Request, item_id: str):
     item = await mongo_client.client.fastapi_db.items.find_one({"_id": str(item_id)})
@@ -32,7 +32,7 @@ async def read_item(request:Request, item_id: str):
     # set_to_cache(item_id, item)
     return {"item": item, "source": "database"}
 
-@router.put("/kafka-only/items/{item_id}")
+@router.put("/items/{item_id}")
 @log_api_endpoint_execution_time
 async def update_item(request:Request, item_id: str, item: ItemModel):
     result = await mongo_client.client.fastapi_db.items.update_one({"_id": str(item_id)}, {"$set": item.dict(by_alias=True)})
@@ -43,7 +43,7 @@ async def update_item(request:Request, item_id: str, item: ItemModel):
     # invalidate_cache(item_id)
     return {"message": "Item updated successfully", "item": item.dict(by_alias=True)}
 
-@router.delete("/kafka-only/items/{item_id}")
+@router.delete("/items/{item_id}")
 @log_api_endpoint_execution_time
 async def delete_item(request:Request, item_id: str):
     result = await mongo_client.client.fastapi_db.items.delete_one({"_id": str(item_id)})

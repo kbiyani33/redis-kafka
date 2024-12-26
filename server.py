@@ -21,7 +21,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
 
 app = FastAPI(lifespan=lifespan)  # Pass the lifespan function
 app.include_router(crud_router, prefix="/api")
-app.include_router(crud_with_kafka_without_redis, prefix="/api")
+app.include_router(crud_with_kafka_without_redis, prefix="/api/kafka-only")
 
 # Define some simple routes to test the app
 @app.get("/")
