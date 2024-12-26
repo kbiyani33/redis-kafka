@@ -1,0 +1,2 @@
+MONGODB_SERVER = "localhost"
+MONGODB_URI = f"mongodb://{MONGODB_SERVER}:27017"

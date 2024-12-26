@@ -1,0 +1,7 @@
+fastapi
+pydantic
+motor
+pymongo
+redis
+kafka-python
+uvicorn
